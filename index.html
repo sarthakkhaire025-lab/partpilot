@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PartPilot – Car part price comparison</title>
+<style>
+:root{--bg:#f4f6fa;--sf:#fff;--sf2:#f0f3f9;--tx:#101a30;--mut:#5a6784;--bd:#dde3ee;--pr:#1650e8;--pr2:#e8efff;--prt:#fff;--ok:#0c8a58;--okb:#e1f6ec;--bad:#c42f3c;--badb:#fdeaec;--wn:#9b6200;--wnb:#fff2d8;--hd:#0c1426;--sh:0 10px 30px rgba(16,26,48,.08);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a111f;--sf:#121b2e;--sf2:#18233a;--tx:#e8edf9;--mut:#93a0be;--bd:#23304b;--pr:#5b8cff;--pr2:#16264d;--prt:#06101f;--ok:#4cd694;--okb:#10301f;--bad:#ff7d8b;--badb:#3a1820;--wn:#ffc15a;--wnb:#3a2c10;--hd:#060b16;--sh:0 10px 30px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#0a111f;--sf:#121b2e;--sf2:#18233a;--tx:#e8edf9;--mut:#93a0be;--bd:#23304b;--pr:#5b8cff;--pr2:#16264d;--prt:#06101f;--ok:#4cd694;--okb:#10301f;--bad:#ff7d8b;--badb:#3a1820;--wn:#ffc15a;--wnb:#3a2c10;--hd:#060b16;--sh:0 10px 30px rgba(0,0,0,.4)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1100px;margin:0 auto;padding:0 18px}
+.top{background:var(--hd);color:#fff}
+nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.lg{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px}.lg svg{width:32px;height:32px}.lg i{font-style:normal;color:#6f9bff}
+nav .r{display:flex;gap:18px;align-items:center;font-size:14px}nav a{color:#c5d0ea;text-decoration:none}nav button{background:transparent;border:1px solid #33425f;color:#dfe7fa;border-radius:8px;padding:6px 12px;cursor:pointer}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:10px;align-items:center;padding:22px 0 0}
+.ey{color:#6f9bff;font-weight:700;font-size:12px;letter-spacing:1.6px;text-transform:uppercase}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.08;margin:8px 0 12px;letter-spacing:-.8px}
+.hero p{color:#b6c3df;font-size:16px;margin:0;max-width:500px}
+.hs{display:flex;gap:26px;margin:22px 0 30px;flex-wrap:wrap}.hs b{display:block;font-size:22px}.hs span{font-size:12.5px;color:#94a5c7}
+#cv{width:100%;height:290px;display:block}
+.road{height:5px;background:repeating-linear-gradient(90deg,#33425f 0 38px,transparent 38px 66px)}
+.pn{background:var(--sf);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--sh);padding:22px;margin:18px 0}
+.pn h2{margin:0 0 4px;font-size:18px}.pn .sb{color:var(--mut);font-size:13.5px;margin-bottom:14px}
+.step{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--pr);color:var(--prt);font-size:13px;font-weight:700;margin-right:8px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.seg button,.cat,.pc button{background:var(--sf2);border:1px solid var(--bd);color:var(--tx);cursor:pointer;font:inherit}
+.seg button{padding:9px 14px;border-radius:10px;display:flex;gap:8px;align-items:center;font-weight:600;font-size:14px}
+.seg button svg{width:34px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6}
+.seg button.on,.cat.on{border-color:var(--pr);background:var(--pr2);color:var(--pr)}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:10px;margin-bottom:12px}
+.cat{border-radius:10px;padding:10px;display:flex;gap:9px;align-items:center;text-align:left}.cat svg{width:22px;height:22px;stroke:var(--pr);fill:none;stroke-width:1.7;flex:none}.cat span{font-size:13.5px;font-weight:600}
+.pc{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.pc button{padding:5px 12px;border-radius:99px;font-size:13px;color:var(--mut)}.pc button:hover{border-color:var(--pr);color:var(--tx)}
+.gr{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:9px;background:var(--bg);color:var(--tx);font:inherit}
+input:focus,select:focus{outline:2px solid var(--pr)}
+.btn{background:var(--pr);color:var(--prt);border:0;border-radius:9px;padding:12px 24px;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.s{padding:8px 14px;font-size:13px}.btn.o{background:transparent;color:var(--pr);border:1px solid var(--pr)}
+.nt{font-size:12.5px;color:var(--mut);margin-top:12px}
+#out{display:none}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.k{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:14px 16px}.k small{color:var(--mut);font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}.k b{display:block;font-size:23px}
+.k.g{background:var(--okb);border-color:transparent}.k.g b{color:var(--ok)}
+.bn{padding:13px 16px;border-radius:10px;font-weight:600;margin:14px 0}.bn.g{background:var(--okb);color:var(--ok)}.bn.r{background:var(--badb);color:var(--bad)}.bn.w{background:var(--wnb);color:var(--wn)}
+.bars{display:grid;gap:8px;margin-top:6px}.bar{display:grid;grid-template-columns:130px 1fr 90px;gap:10px;align-items:center;font-size:13px}.bar div{height:14px;background:var(--sf2);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;border-radius:99px;background:var(--pr)}.bar.sh i{background:var(--bad)}.bar.ch i{background:var(--ok)}.bar b{text-align:right}
+.tl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0 10px}.tl h2{margin:0;font-size:18px;flex:1;min-width:200px}.tl select{width:auto;padding:8px 10px;font-size:13.5px}.tl label.ck{display:flex;gap:6px;align-items:center;margin:0;text-transform:none;font-size:13.5px;color:var(--tx)}.tl label.ck input{width:auto}
+.tw{overflow-x:auto;border:1px solid var(--bd);border-radius:12px;background:var(--sf)}
+table{width:100%;border-collapse:collapse;min-width:920px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);padding:11px 14px;border-bottom:1px solid var(--bd);background:var(--sf2)}
+td{padding:13px 14px;border-bottom:1px solid var(--bd);vertical-align:top}tr:last-child td{border:0}
+td small{display:block;color:var(--mut);font-size:12.5px}
+.pl{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700}.po{background:var(--okb);color:var(--ok)}.pb{background:var(--badb);color:var(--bad)}.pw{background:var(--wnb);color:var(--wn)}
+.am{font-weight:800;font-size:17px}.sv{color:var(--ok);font-weight:700;font-size:13px}
+tr.dm{opacity:.6}.vi input{padding:6px 8px;font-size:13px;width:105px;margin-top:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.li{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--bd);font-size:14px}.li:last-child{border:0}.li small{color:var(--mut);display:block}
+.li button{background:none;border:0;color:var(--pr);cursor:pointer;font-size:13px}
+ul.ck{margin:0;padding-left:20px;color:var(--mut);font-size:14px}ul.ck li{margin:6px 0}
+.hw{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:6px 0 18px}.hw div{background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:16px}.hw b{display:block;margin-bottom:4px}.hw span{color:var(--mut);font-size:14px}
+footer{color:var(--mut);font-size:12.5px;padding:20px 0 40px;text-align:center}
+@media(max-width:760px){.hero,.two{grid-template-columns:1fr}#cv{height:200px}.bar{grid-template-columns:90px 1fr 70px}nav .r a{display:none}}
+.cats{grid-template-columns:repeat(auto-fit,minmax(165px,1fr))}.cat span{line-height:1.25}</style></head><body>
+<div class="top"><div class="w">
+<nav><div class="lg"><svg viewBox="0 0 32 32" fill="none" stroke="#6f9bff" stroke-width="2"><path d="M3 20l3-8a3 3 0 012.8-2h14.4a3 3 0 012.8 2l3 8v4H3z"/><circle cx="9" cy="24" r="3" fill="#0c1426"/><circle cx="23" cy="24" r="3" fill="#0c1426"/></svg>Part<i>Pilot</i></div><div class="r"><a href="#how">How it works</a><a href="#tool">Compare</a><button id="th">Light / Dark</button></div></nav>
+<section class="hero"><div><div class="ey">Car parts price intelligence</div><h1>Know the fair price before you pay the showroom.</h1><p>Check any car part’s availability and price online, or add your dealer’s quote to see the real saving including fitting cost. Then go straight to the seller.</p>
+<div class="hs"><div><b>8+</b><span>seller sources</span></div><div><b>3</b><span>part grades compared</span></div><div><b>120+</b><span>components covered</span></div></div></div><canvas id="cv"></canvas></section></div><div class="road"></div></div>
+
+<div class="w">
+<section class="pn" id="tool"><h2><span class="step">1</span>Your car</h2><div class="sb">Body type affects part pricing. Add your registration or VIN to double-check fitment with sellers.</div>
+<div class="seg" id="bt"></div>
+<div class="gr"><div><label for="mk">Make</label><select id="mk"></select></div><div><label for="md">Model</label><input id="md" placeholder="e.g. Swift, Creta, City"></div><div><label for="yr">Year</label><select id="yr"></select></div><div><label for="vn">Registration / VIN (optional)</label><input id="vn" placeholder="e.g. MH12AB1234"></div></div>
+<h2 style="margin-top:22px"><span class="step">2</span>The part</h2><div class="sb">Browse every car system, or search any component by name. More than 120 parts covered.</div>
+<div class="cats" id="cats"></div><div class="pc" id="pc"></div>
+<div class="gr"><div><label for="pt">Part name (search all components)</label><input id="pt" list="pl" placeholder="e.g. radiator, clutch kit, tail light" autocomplete="off"><datalist id="pl"></datalist></div><div><label for="pos">Position</label><select id="pos"><option value="">Not applicable</option><option>Front</option><option>Rear</option><option>Left</option><option>Right</option></select></div><div><label for="gd">Preferred grade</label><select id="gd"><option value="all">Any grade</option><option>Genuine OEM</option><option>OEM-equivalent</option><option>Aftermarket</option></select></div><div><label for="qt">Quantity</label><input id="qt" type="number" min="1" value="1"></div></div>
+<h2 style="margin-top:22px"><span class="step">3</span>The showroom’s quote <span style="color:var(--mut);font-weight:500;font-size:14px">(optional)</span></h2><div class="sb">Skip this to simply check availability and prices. Add the quote to see your saving, including labour.</div>
+<div class="gr"><div><label for="sq">Part price per unit (₹)</label><input id="sq" type="number" min="1" placeholder="e.g. 3200"></div><div><label for="lb">Showroom labour (₹)</label><input id="lb" type="number" min="0" value="0"></div><div><label for="fg">Local garage fitting (₹)</label><input id="fg" type="number" min="0" value="500"></div><div><label for="sn">Showroom name (optional)</label><input id="sn" placeholder="e.g. ABC Motors, Pune"></div></div>
+<div style="margin-top:18px"><button class="btn" id="go">Check availability and prices</button></div>
+<div class="nt">Prices begin as indicative estimates because a web page cannot read other shops’ live prices. Use each seller’s Buy link, then enter the price you see in the “Verified ₹” box. Every figure recalculates from your verified prices.</div></section>
+
+<section id="out"></section>
+
+<section id="how"><h2 style="margin:26px 0 12px">How PartPilot works</h2>
+<div class="hw"><div><b>1. Enter the showroom quote</b><span>Part price, plus labour if the dealer quoted it.</span></div><div><b>2. Compare sellers</b><span>Genuine OEM, OEM-equivalent and aftermarket options side by side.</span></div><div><b>3. Verify and buy</b><span>Open the seller, confirm the live price, and buy with confidence.</span></div></div></section>
+<footer>PartPilot is a comparison aid. Confirm part number, fitment, warranty and return policy with the seller. Safety parts (brakes, tyres, airbags) should be fitted by a qualified mechanic.</footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=i=>document.getElementById(i),fm=n=>"₹"+Math.round(n).toLocaleString("en-IN"),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const BT={"Hatchback":[1,"M2 14l3-6h8l4 4h5v2zM6 16h.1M18 16h.1"],"Sedan":[1.25,"M2 14l3-5h8l4 3h5v2zM6 16h.1M20 16h.1"],"SUV":[1.5,"M2 14l2-6h13l4 4v2zM6 16h.1M19 16h.1"],"Luxury":[3.2,"M1 14l4-5h9l6 3 3 1v2zM6 16h.1M21 16h.1"]};
+let bt="Sedan";
+Object.entries(BT).forEach(([n,[f,p]])=>{const b=document.createElement("button");b.innerHTML=`<svg viewBox="0 0 26 20"><path d="${p}"/></svg>${n}`;b.onclick=()=>{bt=n;[...$("bt").children].forEach(x=>x.classList.remove("on"));b.classList.add("on")};if(n===bt)b.classList.add("on");$("bt").appendChild(b)});
+["Maruti Suzuki","Hyundai","Tata","Mahindra","Honda","Toyota","Kia","Volkswagen","Skoda","MG","BMW","Mercedes-Benz","Audi","Other"].forEach(k=>$("mk").add(new Option(k)));for(let y=2026;y>=2005;y--)$("yr").add(new Option(y));
+const RAW={
+"Engine":["M4 9h3l2-2h6l2 2h3v7h-3l-2 2H9l-2-2H4z","Spark plug set:1100|Ignition coil:2400|Timing belt kit:3400|Timing chain kit:7800|Piston ring set:4500|Cylinder head gasket:2600|Engine mount:1800|Valve cover gasket:900|Oil pump:4200|Water pump:2900|Engine oil (4L):2200"],
+"Transmission & clutch":["M5 5v14M12 5v14M19 5v14M5 12h14","Clutch plate:4800|Clutch kit:7200|Pressure plate:3200|Flywheel:8500|Gearbox mount:1500|Clutch release bearing:1100|Gear lever cable:900|CV joint:2200|Drive shaft:6500|Differential oil:900"],
+"Brakes":["M3 12a9 9 0 1018 0 9 9 0 10-18 0M9 12a3 3 0 106 0 3 3 0 10-6 0","Brake pad (front):2800|Brake pad (rear):2300|Brake disc:3600|Brake drum:2800|Brake shoe:1900|Brake caliper:5800|Brake fluid:450|Brake hose:900|Master cylinder:4400|ABS sensor:2600|Handbrake cable:1000"],
+"Suspension & steering":["M8 3c4 2-4 4 0 6s-4 4 0 6-4 4 0 6","Shock absorber (front):4200|Shock absorber (rear):3400|Coil spring:2600|Control arm:3300|Ball joint:1100|Stabilizer link:650|Tie rod end:900|Steering rack:14500|Power steering pump:6800|Wheel bearing:1800|Bush kit:1500|Strut mount:1700"],
+"Cooling & AC":["M12 3v18M5 7l14 10M19 7L5 17","Radiator:6200|Radiator fan:3800|Coolant (1L):450|Thermostat:900|AC compressor:14500|AC condenser:6500|Cabin AC blower:3300|Heater core:4200|Radiator hose:850|Expansion tank:1300"],
+"Fuel & exhaust":["M6 3h8v18H6zM14 8h3l2 2v8M9 7h2","Fuel pump:4800|Fuel injector:2800|Fuel filter:650|Throttle body:6500|Silencer / muffler:5200|Catalytic converter:15500|Exhaust pipe:3200|Oxygen (lambda) sensor:2600|Fuel tank cap:450|Turbocharger:38000|DPF filter:21000"],
+"Electrical & lighting":["M13 2L5 14h6l-1 8 8-12h-6z","Battery:5500|Alternator:9500|Starter motor:7200|Headlight assembly:6500|Tail light assembly:3800|Fog lamp:1800|Indicator lamp:700|Headlight bulb:650|Fuse & relay kit:600|Wiring harness:7500|Horn:700|Ignition switch:1800"],
+"Filters & fluids":["M3 5h18l-7 8v6l-4-2v-4z","Oil filter:450|Air filter:650|Cabin filter:700|Transmission fluid:1600|Power steering fluid:500|Wiper washer fluid:150|Engine oil (4L):2200|Coolant (1L):450"],
+"Wheels & tyres":["M12 3a9 9 0 100 18 9 9 0 000-18M12 8a4 4 0 100 8 4 4 0 000-8","Tyre (single):4800|Alloy wheel:8500|Steel wheel:2800|Wheel cap:350|Wheel nut set:600|TPMS sensor:2400|Spare wheel:3500|Wheel balancing weights:300"],
+"Body & exterior":["M3 15l2-6h14l2 6v3H3z","Bumper (front):7800|Bumper (rear):6800|Bonnet:12500|Fender:5200|Door panel:11000|Side mirror:3600|Windshield glass:7200|Wiper blade set:750|Grille:3200|Door handle:900|Mud flap set:600|Number plate light:350"],
+"Interior":["M7 4h6l1 8H7zM7 12v8M14 12l3 4h3","Seat cover set:4500|Floor mat set:1800|Steering wheel:5800|Dashboard:14000|Gear knob:650|Seat belt:2800|Sun visor:700|Interior door handle:650|Inside rear-view mirror:800|Infotainment unit:12000"],
+"Sensors & electronics":["M12 12h.01M7 7a7 7 0 000 10M17 7a7 7 0 010 10","ECU / engine computer:22000|Mass airflow sensor:4200|Crankshaft sensor:1900|Camshaft sensor:2100|Parking sensor set:2600|Reverse camera:2800|Airbag module:12500|Key fob:3800|Power window motor:2400|Central locking motor:1300"],
+"Service kits":["M14 6l4 4-9 9H5v-4z","Minor service kit:3200|Major service kit:7800|Brake service kit:5200|Clutch overhaul kit:9500|Suspension overhaul kit:14000|AC service kit:2500"]};
+const CT={};Object.entries(RAW).forEach(([n,[ic,str]])=>{CT[n]=[ic,Object.fromEntries(str.split("|").map(p=>{const k=p.lastIndexOf(":");return[p.slice(0,k),+p.slice(k+1)]}))]});
+const PT=Object.assign({},...Object.values(CT).map(c=>c[1]));
+Object.keys(PT).sort().forEach(p=>$("pl").appendChild(new Option(p)));
+Object.entries(CT).forEach(([n,[ic,ps]])=>{const b=document.createElement("button");b.className="cat";b.innerHTML=`<svg viewBox="0 0 24 24"><path d="${ic}"/></svg><span>${n}<small style="display:block;font-weight:400;color:var(--mut);font-size:11.5px">${Object.keys(ps).length} parts</small></span>`;b.onclick=()=>{document.querySelectorAll(".cat").forEach(x=>x.classList.remove("on"));b.classList.add("on");$("pc").innerHTML="";Object.keys(ps).forEach(p=>{const c=document.createElement("button");c.textContent=p;c.onclick=()=>{$("pt").value=p;[...$("pc").children].forEach(x=>x.style.borderColor="");c.style.borderColor="var(--pr)"};$("pc").appendChild(c)})};$("cats").appendChild(b)});
+const G=(q,d)=>"https://www.google.com/search?q="+encodeURIComponent("site:"+d+" "+q);
+const SL=[{n:"Boodmo",d:"boodmo.com",u:"https://boodmo.com",k:"Online spares marketplace",t:["OEM-equivalent","Aftermarket"],s:(q,e)=>"https://boodmo.com/search/?q="+e},
+{n:"Amazon.in",d:"amazon.in",u:"https://www.amazon.in",k:"Marketplace, multiple sellers",t:["Aftermarket","OEM-equivalent"],s:(q,e)=>"https://www.amazon.in/s?k="+e},
+{n:"Flipkart",d:"flipkart.com",u:"https://www.flipkart.com",k:"Marketplace, multiple sellers",t:["Aftermarket"],s:(q,e)=>"https://www.flipkart.com/search?q="+e},
+{n:"Spareto",d:"spareto.com",u:"https://www.spareto.com",k:"Online spares retailer",t:["OEM-equivalent","Genuine OEM"],s:q=>G(q,"spareto.com")},
+{n:"Autozilla",d:"autozilla.in",u:"https://www.autozilla.in",k:"Online spares retailer",t:["Aftermarket","OEM-equivalent"],s:q=>G(q,"autozilla.in")},
+{n:"GoMechanic",d:"gomechanic.in",u:"https://gomechanic.in",k:"Service chain and spares",t:["OEM-equivalent","Genuine OEM"],s:q=>G(q,"gomechanic.in")},
+{n:"IndiaMART",d:"indiamart.com",u:"https://www.indiamart.com",k:"Local and wholesale sellers",t:["Aftermarket","OEM-equivalent"],s:(q,e)=>"https://dir.indiamart.com/search.mp?ss="+e},
+{n:"Moglix",d:"moglix.com",u:"https://www.moglix.com",k:"Industrial and auto supplies",t:["Aftermarket","OEM-equivalent"],s:q=>G(q,"moglix.com")}];
+function hs(s){let x=2166136261;for(const c of s){x^=c.charCodeAt(0);x=Math.imul(x,16777619)}return x>>>0}
+function rn(a){return()=>{a=Math.imul(a^a>>>15,2246822507)>>>0;a=Math.imul(a^a>>>13,3266489909)>>>0;return((a^=a>>>16)>>>0)/4294967296}}
+const F={"Genuine OEM":[.92,1.05,"12 months"],"OEM-equivalent":[.62,.85,"6–12 months"],"Aftermarket":[.38,.66,"3–6 months"]};
+let D=null,first=true,FL={ty:"all",so:"price",st:false,ch:false},BK=[],HS=[];
+try{HS=JSON.parse(localStorage.getItem("pp_hist")||"[]")}catch(e){HS=[]}
+const eff=x=>x.v!=null?x.v:x.est;
+function run(inp){const I=inp||{mk:$("mk").value,bt,md:$("md").value.trim(),yr:$("yr").value,vn:$("vn").value.trim(),part:$("pt").value.trim(),pos:$("pos").value,qt:Math.max(1,+$("qt").value||1),sq:+$("sq").value,lb:+$("lb").value||0,fg:+$("fg").value||0,sn:$("sn").value.trim()};
+ if(!I.part){alert("Please choose or type a part.");return}if(!inp)FL.ty=$("gd").value;
+ const key=(I.mk+I.md+I.yr+I.part+(I.pos||"")).toLowerCase(),r0=rn(hs(key)),hit=Object.keys(PT).find(k=>k.toLowerCase()===I.part.toLowerCase()),base=(hit?PT[hit]:900+r0()*5000)*BT[I.bt][0]*(.9+(hs(I.mk)%25)/100),e=encodeURIComponent([I.mk,I.md,I.yr,I.pos&&!/\(front\)|\(rear\)/i.test(I.part)?I.pos:"",I.part].join(" ").replace(/\s+/g," ").trim());
+ const rows=SL.map(s=>{const r=rn(hs(key+s.n)),ty=s.t[Math.floor(r()*s.t.length)],f=F[ty],p=base*(f[0]+r()*(f[1]-f[0])),sh=r()<.4?0:Math.round(49+r()*120),st=r();
+ return{s,ty,p,sh,est:p+sh/I.qt,v:null,w:f[2],stock:st<.15?0:st<.45?1:2,dl:Math.round(2+r()*6),rt:+(3.6+r()*1.2).toFixed(1),q:e}});
+ D={rows,I,sn:I.sn||"The showroom"};first=true;draw()}
+function draw(){const {rows,I,sn}=D,sq=I.sq,has=sq>0,q=I.qt,av=rows.filter(x=>x.stock>0),ef=av.map(eff).sort((a,b)=>a-b),med=ef[Math.floor(ef.length/2)],best=ef[0],
+ bestRow=av.find(x=>eff(x)===best),cheap=av.filter(x=>eff(x)<sq).length,shT=sq*q+I.lb,onT=best*q+I.fg+(bestRow?bestRow.sh*(bestRow.v!=null?0:0):0),sv=Math.max(shT-onT,0),diff=(sq-med)/med*100,ver=rows.filter(x=>x.v!=null).length;
+ const bn=!has?`<div class="bn w">Showing availability and typical online prices. Add a showroom quote above to see how much you could save.</div>`:diff>12?`<div class="bn r">${esc(sn)} quoted ${fm(sq)} per unit, about ${Math.round(diff)}% above the typical online price of ${fm(med)}. Buying elsewhere could save you money.</div>`:diff>-5?`<div class="bn w">${esc(sn)}’s quote of ${fm(sq)} is close to the online price of ${fm(med)}. Compare warranty and fitting before deciding.</div>`:`<div class="bn g">${esc(sn)}’s quote of ${fm(sq)} is below the typical online price of ${fm(med)}. It looks like a good deal.</div>`;
+ let L=rows.slice();if(FL.ty!=="all")L=L.filter(x=>x.ty===FL.ty);if(FL.st)L=L.filter(x=>x.stock>0);if(FL.ch&&has)L=L.filter(x=>x.stock>0&&eff(x)<sq);
+ L.sort((a,b)=>(b.stock>0)-(a.stock>0)||(FL.so==="price"?eff(a)-eff(b):FL.so==="days"?a.dl-b.dl:b.rt-a.rt));
+ const mx=Math.max(sq,...av.map(eff)),bars=(has?`<div class="bar sh"><span>${esc(sn)}</span><div><i style="width:${sq/mx*100}%"></i></div><b>${fm(sq)}</b></div>`:"")+av.slice().sort((a,b)=>eff(a)-eff(b)).map(x=>`<div class="bar ${eff(x)<sq?"ch":""}"><span>${x.s.n}</span><div><i style="width:${eff(x)/mx*100}%"></i></div><b>${fm(eff(x))}</b></div>`).join("");
+ const tr=L.map(x=>{const i=rows.indexOf(x),t=eff(x),c=x.stock>0&&t<sq;
+ return`<tr class="${x.stock?"":"dm"}"><td><b>${x.s.n}</b><small>${x.s.k}</small><small>Rating ~${x.rt}★ (est.)</small></td><td>${x.ty}<small>Warranty ${x.w}</small></td>
+ <td><span class="am">${fm(t)}</span><small>${x.v!=null?"Verified by you":"Estimate per unit"}</small>${c?`<span class="sv">Save ${fm(sq-t)} (${Math.round((sq-t)/sq*100)}%) per unit</span>`:`<small>${has&&t>=sq?"Not cheaper than showroom":""}</small>`}<input type="number" min="1" placeholder="Verified ₹" value="${x.v!=null?Math.round(x.v):""}" data-i="${i}" aria-label="Verified price for ${x.s.n}"></td>
+ <td><span class="pl ${["pb","pw","po"][x.stock]}">${["Out of stock","Limited","In stock"][x.stock]}</span><small>Delivery ~${x.dl} days (est.)</small></td>
+ <td><a class="btn s" href="${x.s.s(I.part,x.q)}" target="_blank" rel="noopener noreferrer">Buy →</a><small style="margin-top:8px"><a href="${x.s.u}" target="_blank" rel="noopener noreferrer" style="color:var(--pr)">${x.s.d}</a></small></td></tr>`}).join("");
+ $("out").style.display="block";
+ $("out").innerHTML=`<div class="kp">${has?`<div class="k"><small>Showroom total</small><b>${fm(shT)}</b><small style="text-transform:none">${q} × ${fm(sq)} + labour ${fm(I.lb)}</small></div><div class="k"><small>Best online total</small><b>${fm(onT)}</b><small style="text-transform:none">${q} × ${fm(best)} + fitting ${fm(I.fg)}</small></div><div class="k g"><small>You could save</small><b>${fm(sv)}</b><small style="text-transform:none">${shT?Math.round(sv/shT*100):0}% of the showroom total</small></div><div class="k"><small>Cheaper options</small><b>${cheap} of ${rows.length}</b><small style="text-transform:none">${ver} price${ver===1?"":"s"} verified</small></div>`:`<div class="k"><small>Best online price</small><b>${fm(best)}</b><small style="text-transform:none">${q} × ${fm(best)} = ${fm(best*q)}</small></div><div class="k"><small>Typical online price</small><b>${fm(med)}</b><small style="text-transform:none">median of in-stock sellers</small></div><div class="k"><small>Sellers in stock</small><b>${av.length} of ${rows.length}</b><small style="text-transform:none">${rows.filter(x=>x.stock===1).length} with limited stock</small></div><div class="k"><small>Prices verified</small><b>${ver}</b><small style="text-transform:none">enter real prices below</small></div>`}</div>${bn}
+ <div class="pn"><h2>Price per unit</h2><div class="bars">${bars}</div><div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn s" id="ab">Add best option to basket</button><button class="btn s o" id="sv">Save comparison</button><button class="btn s o" id="ex">Export CSV</button></div></div>
+ <div class="tl"><h2>Compare sellers for “${esc(I.part)}” · ${esc(I.mk)} ${esc(I.md)} ${esc(I.yr)}</h2><select id="ft" aria-label="Part type"><option value="all">All part types</option><option>Genuine OEM</option><option>OEM-equivalent</option><option>Aftermarket</option></select><select id="so" aria-label="Sort"><option value="price">Sort: lowest price</option><option value="days">Sort: fastest delivery</option><option value="rate">Sort: best rating</option></select><label class="ck"><input type="checkbox" id="fs">In stock</label>${has?`<label class="ck"><input type="checkbox" id="fc">Cheaper than showroom</label>`:""}</div>
+ <div class="tw"><table><thead><tr><th>Seller</th><th>Part type</th><th>Price and verification</th><th>Availability</th><th>Buy / seller</th></tr></thead><tbody>${tr||'<tr><td colspan="5">No sellers match these filters.</td></tr>'}</tbody></table></div>
+ <div class="two" style="margin-top:18px"><div class="pn" style="margin:0"><h2>Basket</h2><div class="sb">Best options you added, for a full-service estimate.</div>${bk()}</div><div class="pn" style="margin:0"><h2>Before you buy</h2><ul class="ck"><li>Match the OEM part number or VIN with the seller.</li><li>Check warranty length and return policy.</li><li>Prefer Genuine or OEM-equivalent for brakes and safety parts.</li><li>Ask your garage about fitting cost and warranty on fitted parts.</li><li>Keep the invoice for warranty claims.</li></ul></div></div>
+ <div class="pn"><h2>Saved comparisons</h2><div class="sb">Stored in this browser only.</div>${hl()}</div>`;
+ $("ft").value=FL.ty;$("so").value=FL.so;$("fs").checked=FL.st;if($("fc"))$("fc").checked=FL.ch;
+ $("ft").onchange=e=>{FL.ty=e.target.value;draw()};$("so").onchange=e=>{FL.so=e.target.value;draw()};$("fs").onchange=e=>{FL.st=e.target.checked;draw()};if($("fc"))$("fc").onchange=e=>{FL.ch=e.target.checked;draw()};
+ $("out").querySelectorAll("td input").forEach(n=>n.onchange=()=>{const v=parseFloat(n.value);D.rows[+n.dataset.i].v=v>0?v:null;draw()});
+ $("ab").onclick=()=>{if(bestRow){BK.push({part:I.part,q,s:bestRow.s.n,t:best*q,o:sq*q});draw()}};
+ $("sv").onclick=()=>{HS.unshift({I,sv});HS=HS.slice(0,8);try{localStorage.setItem("pp_hist",JSON.stringify(HS))}catch(e){}draw()};
+ $("ex").onclick=exp;
+ $("out").querySelectorAll("[data-rb]").forEach(b=>b.onclick=()=>{BK.splice(+b.dataset.rb,1);draw()});
+ $("out").querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>run(HS[+b.dataset.ld].I));
+ $("out").querySelectorAll("[data-dh]").forEach(b=>b.onclick=()=>{HS.splice(+b.dataset.dh,1);try{localStorage.setItem("pp_hist",JSON.stringify(HS))}catch(e){}draw()});
+ if(first){first=false;$("out").scrollIntoView({behavior:"smooth"})}}
+function bk(){if(!BK.length)return'<div class="sb">Nothing added yet.</div>';const o=BK.reduce((a,x)=>a+x.o,0),t=BK.reduce((a,x)=>a+x.t,0);return BK.map((x,i)=>`<div class="li"><div>${esc(x.part)} × ${x.q}<small>${esc(x.s)} · ${fm(x.t)}</small></div><button data-rb="${i}">Remove</button></div>`).join("")+(o>0?`<div class="li"><b>Total vs showroom</b><b>${fm(t)} vs ${fm(o)}</b></div><div class="li"><b style="color:var(--ok)">Saving</b><b style="color:var(--ok)">${fm(Math.max(o-t,0))}</b></div>`:`<div class="li"><b>Total</b><b>${fm(t)}</b></div>`)}
+function hl(){return HS.length?HS.map((h,i)=>`<div class="li"><div>${esc(h.I.part)} · ${esc(h.I.mk)} ${esc(h.I.md)}<small>${h.I.sq>0?"Showroom "+fm(h.I.sq)+" · est. saving "+fm(h.sv):"Availability check"}</small></div><div><button data-ld="${i}">Load</button><button data-dh="${i}">Delete</button></div></div>`).join(""):'<div class="sb">No saved comparisons yet.</div>'}
+async function exp(){const r=["Seller,Part type,Price per unit (INR),Verified,Stock,Delivery days (est.),Link"];D.rows.forEach(x=>r.push([x.s.n,x.ty,Math.round(eff(x)),x.v!=null?"yes":"estimate",["out","limited","in stock"][x.stock],x.dl,x.s.s(D.I.part,x.q)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")));
+ try{const d=await claude.use("downloads");if(!d){alert("Downloads are not available in this view.");return}await d.save({filename:"partpilot-comparison.csv",data:r.join("\n")})}catch(e){if(e&&e.code!=="declined")alert("Could not save the file.")}}
+$("go").onclick=()=>run();
+$("th").onclick=()=>{const d=document.documentElement;d.dataset.theme=getComputedStyle(d).getPropertyValue("--bg").trim()==="#0a111f"?"light":"dark"};
+(function(){try{const cv=$("cv"),R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true}),sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(34,2,.1,60);cam.position.set(5.6,2.3,6.6);cam.lookAt(0,.8,0);
+ sc.add(new THREE.AmbientLight(0xffffff,.75));const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(4,6,5);sc.add(dl);
+ const car=new THREE.Group(),P=(c,sh)=>new THREE.MeshPhongMaterial({color:c,shininess:sh||60,flatShading:false});
+ const sh=new THREE.Shape();sh.moveTo(-2.3,.3);sh.lineTo(-2.36,.78);sh.quadraticCurveTo(-2.3,1.02,-1.7,1.06);sh.quadraticCurveTo(-1.2,1.55,-.5,1.62);sh.lineTo(.3,1.62);sh.quadraticCurveTo(.9,1.5,1.25,1.05);sh.quadraticCurveTo(2,.98,2.28,.82);sh.quadraticCurveTo(2.42,.6,2.3,.3);sh.lineTo(-2.3,.3);
+ const bg=new THREE.ExtrudeGeometry(sh,{depth:1.7,bevelEnabled:true,bevelSize:.07,bevelThickness:.07,bevelSegments:3});bg.translate(0,0,-.85);
+ car.add(new THREE.Mesh(bg,P(0x1f5bff,90)));car.add(new THREE.LineSegments(new THREE.EdgesGeometry(bg,25),new THREE.LineBasicMaterial({color:0x9fbcff})));
+ const ws=new THREE.Shape();ws.moveTo(-1.1,1.06);ws.lineTo(-.65,1.52);ws.lineTo(.22,1.57);ws.lineTo(1.0,1.07);ws.lineTo(-1.1,1.06);
+ const wg=new THREE.ExtrudeGeometry(ws,{depth:1.82,bevelEnabled:false});wg.translate(0,0,-.91);car.add(new THREE.Mesh(wg,new THREE.MeshPhongMaterial({color:0x0b1426,shininess:120,transparent:true,opacity:.92})));
+ [-.55,.55].forEach(z=>{const h=new THREE.Mesh(new THREE.BoxGeometry(.12,.14,.4),new THREE.MeshBasicMaterial({color:0xfff3c4}));h.position.set(2.38,.78,z);car.add(h);const t=new THREE.Mesh(new THREE.BoxGeometry(.1,.12,.45),new THREE.MeshBasicMaterial({color:0xff3b4a}));t.position.set(-2.42,.8,z);car.add(t)});
+ const W=[];function wheel(x,z){const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.TorusGeometry(.36,.16,12,30),P(0x12161f,10)));const rim=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.12,26),P(0xd5deef,100));rim.rotation.x=Math.PI/2;g.add(rim);
+  for(let i=0;i<5;i++){const sp=new THREE.Mesh(new THREE.BoxGeometry(.56,.05,.05),P(0x8fa0bd,80));sp.rotation.z=i*Math.PI/5;sp.position.z=.08*Math.sign(z);g.add(sp)}
+  g.position.set(x,.46,z);car.add(g);W.push(g)}
+ [[1.45,.95],[1.45,-.95],[-1.4,.95],[-1.4,-.95]].forEach(a=>wheel(a[0],a[1]));
+ sc.add(car);const grid=new THREE.GridHelper(18,18,0x33425f,0x1b2740);grid.position.y=.02;sc.add(grid);
+ function rs(){const w=cv.clientWidth,h=cv.clientHeight;R.setSize(w,h,false);R.setPixelRatio(Math.min(devicePixelRatio,2));cam.aspect=w/h;cam.updateProjectionMatrix()}rs();addEventListener("resize",rs);
+ let t=0;(function l(){t+=.01;car.rotation.y=t*.6;car.position.y=Math.sin(t*2)*.02;W.forEach(w=>w.rotation.z-=.07);R.render(sc,cam);requestAnimationFrame(l)})();}catch(e){}})();
+</script></body></html>
